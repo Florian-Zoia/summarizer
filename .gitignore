@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtuelle Umgebungen
+.venv/
+venv/
+env/
+
+# Secrets / Konfiguration
+.env
+.env.*
+!.env.example
+
+# Laufzeitdaten
+failed_ids.json
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
