@@ -10,17 +10,18 @@ from config import MINIFLUX_API_KEY, MINIFLUX_URL, MINIFLUX_TIMEOUT, OPENROUTER_
 
 FAILED_IDS_FILE = Path("failed_ids.json")
 
-
+# Load file of failed articles to summarize 
 def load_failed_ids() -> set[int]:
     if FAILED_IDS_FILE.exists():
         return set(json.loads(FAILED_IDS_FILE.read_text()))
     return set()
 
-
+# save file of failes articles to summarize
 def save_failed_ids(ids: set[int]) -> None:
     FAILED_IDS_FILE.write_text(json.dumps(list(ids)))
     
 
+# get articles from miniflux 
 def get_unread_articles() -> list[dict]: 
     params = {
         "status": "unread",
@@ -56,7 +57,7 @@ def get_unread_articles() -> list[dict]:
     except requests.exceptions.RequestException as e:
         print("A request error occurred:", e)
         
-        
+# access articles via html and retrieve text
 def get_article_content(article_url: str) -> str:
     HEADERS = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -77,7 +78,7 @@ def get_article_content(article_url: str) -> str:
     else: 
         return article_content
 
-    
+# send article to ai and let it summarize 
 def summarize_article(article_title: str, article_content: str) -> str:
     prompt_template = Path("prompt.txt").read_text(encoding="utf-8")
     prompt = prompt_template.format(
@@ -116,7 +117,7 @@ def summarize_article(article_title: str, article_content: str) -> str:
         print("A request error occurred:", e)
         return None
 
-
+# construct message and send to ntfy 
 def send_to_ntfy(title: str, content: str, url: str) -> None:
     message = f"{content}\n\nRead more: {url}"
     try: 
@@ -133,7 +134,7 @@ def send_to_ntfy(title: str, content: str, url: str) -> None:
     except requests.exceptions.RequestException as e:
         print("A request error occurred:", e)
         
-        
+# marks articles to be flagged as read 
 def mark_article_as_read(id: int) -> None: 
     response = requests.put(
         f"{MINIFLUX_URL}/v1/entries",
