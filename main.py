@@ -95,8 +95,8 @@ def summarize_article(article_title: str, article_content: str) -> str:
             data = json.dumps({
                 "models": [
                     "google/gemma-4-26b-a4b-it:free",
-                    "google/gemma-4-31b-it:free",
-                    "z-ai/glm-5.2:free"
+                    "recursive/flint-v1.0:free",
+                    "nvidia/nemotron-3.5-super-vl:free"
                     ],
                 "messages": [
                     {
